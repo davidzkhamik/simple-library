@@ -1,68 +1,49 @@
 package main
 
-import "fmt"
+import (
+    "library-app/library" 
+    "fmt"
+)
 
 func main() {
-	fmt.Println("Запуск системы управления библиотекой")
+    myLibrary := library.New()
+    myLibrary.AddBook("Война и мир","Лев Толстой",1763)
+	myLibrary.AddBook("Преступление и наказание","Ф.М. Достоевский",1343)
 
-	//1. Создаем экземпляр библиотеки
-	myLibrary := &Library{} //Пустая библиотека готова к работе
+	// Добавляем читателей
+	myLibrary.AddReader("Иван", "Иванов")
+	myLibrary.AddReader("Валерий","Кузьмин")
+    myLibrary.IssueBookToReader(1,1)
 
-	fmt.Println("Наполняем библиотеку")
-	//2. Добавляем читателей
-	myLibrary.AddReader("Агунда", "Кокойти")
-	myLibrary.AddReader("Сергей", "Меняйло")
 
-	//3. Добавляем книги
-	myLibrary.AddBook("1984", "Джордж Оруэлл", 1949)
-	myLibrary.AddBook("Мастер и Маргарита", "Михаил Булгаков", 1967)
 
-	fmt.Println("\n---Библиотека готова к работе---")
-	fmt.Println("Количество читателей:", len(myLibrary.Readers))
-	fmt.Println("Количество книг:", len(myLibrary.Books))
+    fmt.Println("\n--- Библиотека готова к работе ---")
+    fmt.Println("Количество читателей:", len(myLibrary.Readers))
+    fmt.Println("Количество книг:", len(myLibrary.Books))
 
-	//Модуль 16. Практикум
-	fmt.Println("---Тестируем выдачу книг---")
-	//Выдаем книгу 1 читателю 1
-	fmt.Println("Попытка выдать книгу 1 читателю 1")
-	err := myLibrary.IssueBookToReader(1, 1)
-	if err != nil {
-		fmt.Println("Ошибка выдачи:", err)
-	} else {
-		fmt.Println("Книга успешно выдана")
-	}
+    fmt.Println("\n---Тестируем выдачу книг---")
+    
+    err := myLibrary.IssueBookToReader(1, 1)
+    if err != nil {
+        fmt.Println("Ошибка выдачи:", err)
+    }
 
-	//Попытка выдать ту же книгу еще раз
-	fmt.Println("Поптка выдать уже выданную книгу")
-	err = myLibrary.IssueBookToReader(1, 2)
-	if err != nil {
-		fmt.Println("Ошибка выдачи:", err)
-	} else {
-		fmt.Println("Книга успешно выдана")
-	}
+    book, _ := myLibrary.FindBookByID(1)
+    if book != nil {
+        fmt.Println("Статус книги после выдачи:", book)
+    }
 
-	fmt.Println("Попытка выдать несуществующую книгу")
-	err = myLibrary.IssueBookToReader(99, 1)
-	if err != nil {
-		fmt.Println("Ошибка выдачи:", err)
-	} else {
-		fmt.Println("Книга успешно выдана")
-	}
+    err = myLibrary.IssueBookToReader(99, 1)
+    if err != nil {
+        fmt.Println("Ожидаемая ошибка:", err)
+    }
 
-	fmt.Println("Попытка выдать книгу несуществующему читателю")
-	err = myLibrary.IssueBookToReader(2, 99)
-	if err != nil {
-		fmt.Println("Ошибка выдачи:", err)
-	} else {
-		fmt.Println("Книга успешно выдана")
-	}
 
 	fmt.Println()
 
-	//Смотрим все книги в библиотеке
 	books := myLibrary.GetAllBooks()
 	for _, book := range books{
 		fmt.Println(book)
 	}
-	
+
 }

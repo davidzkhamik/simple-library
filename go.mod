@@ -1,3 +1,2 @@
-module github.com/davidzkhamik/simple-library
-
+module library-app
 go 1.25.0
